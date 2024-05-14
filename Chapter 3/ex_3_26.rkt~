@@ -1,0 +1,39 @@
+#lang sicp
+
+(define (make-table) (list '*table*))
+
+;;ordered? is a procedure taking two arguments that checks whether the first argument is 'smaller' than the second argument according to the ordering
+
+;;Underlying tree assume we have a tree-table which is ordered
+(define (assoc key tree-table)
+  (cond ((null? tree-table) false)
+        ((equal? key (caar tree-table)) (car tree-table))
+        (else
+         (let ((left-tree-table (cadr tree-table))
+               (right-tree-table (cddr tree-table)))
+           (if (ordered? key (caar tree-table))
+               (assoc key left-tree-table)
+               (assoc key right-tree-table))))))
+               
+
+(define (lookup table key)
+  (let ((record (assoc key (cdr table))))
+    (if record
+        (cdr record)
+        false)))
+
+(define (insert! table key value)
+  (define (ordered-insert! tree-table key value)
+    (let ((node-key (caar tree-table)))
+      (if (null? (cdr tree-table))
+          (if (ordered? key node-key)
+              (set-cdr! tree-table (cons (cons key value) nil))
+              (set-cdr! tree-table (cons nil (cons key value))))
+          (if (ordered? key node-key)
+              (ordered-insert! (cadr tree-table))
+              (ordered-insert! (cddr tree-table))))))
+  (let ((record (assoc key (cdr table))))
+    (if record
+        (set-cdr! record value)
+        (ordered-insert! tree-table key value))))
+        

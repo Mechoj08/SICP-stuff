@@ -1,0 +1,18 @@
+#lang sicp
+
+(define (let-bindings exp) (cadr exp))
+
+(define (let-body exp) (caddr exp))
+
+(define (let-bindings-variables exp)
+  (if (null? exp)
+      '()
+      (cons (caar exp) (let-bindings-variables (cdr exp)))))
+
+(define (let-bindings-expression exp)
+  (if (null? exp)
+      '()
+      (cons (cadar exp) (let-bindings-expression (cdr exp)))))
+
+(define (let->combination exp)
+  (apply (make-lambda (let-bindings-variables exp) (let-body-exp)) (let-bindings-expression exp)))

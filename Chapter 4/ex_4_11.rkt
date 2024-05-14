@@ -1,0 +1,26 @@
+#lang sicp
+
+(define (make-frame variables values)
+  (define (make-bindings variables values)
+    (if (null? variables)
+        bindings
+        (cons (cons (car variables) (car values)) (make-bindings (cdr variables) (cdr values))))
+  (make-bindings '() variables values)))
+
+(define (frame-variables frame)
+  (define (extract-vars-from-bindings frame)
+    (if (null? frame)
+        '()
+        (cons (caar vars) (extract-vars-from-bindings (cdr frame)))))
+  (extract-vars-from-bindings frame))
+
+(define (frame-values frame)
+  (define (extract-vars-from-bindings frame)
+    (if (null? frame)
+        '()
+        (cons (cdar vars) (extract-vars-from-bindings (cdr frame)))))
+  (extract-vars-from-bindings frame))
+
+(define (add-binding-to-frame! var val frame)
+  (set-car! frame (cons var val))
+  (set-cdr! frame frame))

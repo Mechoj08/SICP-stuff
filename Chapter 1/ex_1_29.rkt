@@ -1,0 +1,22 @@
+#lang sicp
+
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+
+(define (cube x) (* x x x))
+
+(define (square x) (* x x))
+
+(define (average x y) (/ (+ x y) 2))
+
+(define (integral f a b n)
+  (define h (/ (- b a) n))
+  (define (add-dx x) (+ x h h))
+  (define (partial_simpson x)
+    (define xnext (add-dx x))
+    (+ (f x) (* 4.0 (f (average x xnext))) (f xnext)))
+  (* (/ h 3.0) (sum partial_simpson a add-dx (- b h))))
+

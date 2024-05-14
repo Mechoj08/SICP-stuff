@@ -1,0 +1,14 @@
+#lang sicp
+
+(define (cc amount coins-list)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (null? coins-list)) 0)
+        (else (+ (cc amount
+                     (cdr coins-list))
+              (cc (- amount
+                     (first-denomination
+                      coins-list))
+                  coins-list)))))
+
+(define (first-denomination kinds-of-coins)
+  (car kinds-of-coins))
